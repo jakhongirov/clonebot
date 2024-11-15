@@ -174,7 +174,7 @@ bot.on('message', async (msg) => {
 
          if (addCardExpiry) {
             const atmosToken = await model.atmosToken();
-            const formatExpire = addCardExpiry?.expiry?.split('/').reverse();
+            const formatExpire = addCardExpiry?.expiry?.split('/').reverse().join('');
             const atmosBind = await atmos.bindInit(
                addCardExpiry?.card_number,
                formatExpire,
