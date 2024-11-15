@@ -33,33 +33,35 @@ bot.onText(/\/start/, async (msg) => {
 
    if (foundUser) {
       if (foundCards?.count == 0) {
-         bot.sendMessage(chatId, localText.startText1);
-         bot.sendMessage(chatId, localText.askCardNumberUz).then(
-            async () => {
-               await model.editStep(chatId, 'ask_card_number');
-            },
-         );
+         bot.sendMessage(chatId, localText.startText1).then(async () => {
+            bot.sendMessage(chatId, localText.askCardNumberUz).then(
+               async () => {
+                  await model.editStep(chatId, 'ask_card_number');
+               },
+            );
+         });
       } else {
          bot.sendMessage(chatId, localText.startText1);
       }
    } else {
-      bot.sendMessage(chatId, localText.startText1);
-      bot.sendMessage(chatId, localText.startText2, {
-         reply_markup: {
-            keyboard: [
-               [
-                  {
-                     text: localText.uz,
-                  },
-                  {
-                     text: localText.cyrillic,
-                  },
+      bot.sendMessage(chatId, localText.startText1).then(async () => {
+         bot.sendMessage(chatId, localText.startText2, {
+            reply_markup: {
+               keyboard: [
+                  [
+                     {
+                        text: localText.uz,
+                     },
+                     {
+                        text: localText.cyrillic,
+                     },
+                  ],
                ],
-            ],
-            resize_keyboard: true,
-         },
-      }).then(async () => {
-         await model.createUser(chatId, 'start');
+               resize_keyboard: true,
+            },
+         }).then(async () => {
+            await model.createUser(chatId, 'start');
+         });
       });
    }
 });
