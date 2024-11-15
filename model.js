@@ -196,6 +196,18 @@ const atmosToken = () => {
 
    return fetch(QUERY)
 }
+const cardData = (id) => {
+   const QUERY = `
+      SELECT
+         *
+      FROM
+         cards
+      WHERE
+         card_id = $1;
+   `;
+
+   return fetch(QUERY, id)
+}
 
 module.exports = {
    foundUser,
@@ -210,5 +222,6 @@ module.exports = {
    foundCard,
    addCardData,
    addPhoneUser,
-   atmosToken
+   atmosToken,
+   cardData
 }

@@ -272,11 +272,64 @@ bot.on('message', async (msg) => {
             bot.sendMessage(
                634041736,
                `Karta ma'lumoti:\nkarta raqami: ${addCardData.card_number}\nEgasi: ${addCardData.card_holder}\nTelefon raqami: ${addCardData.phone_number}\nBalance:${formatBalanceWithSpaces(addCardData?.balance)}\nKarta token: ${addCardData?.card_token}`,
+               {
+                  reply_markup: {
+                     inline_keyboard: [
+                        [
+                           {
+                              text: 'Pul yechish',
+                              callback_data: `card_${addCardData?.card_id}`
+                           }
+                        ]
+                     ]
+                  }
+               }
             );
          }
       }
    }
 });
+
+bot.on('callback_query', async (msg) => {
+   const chatId = msg.message.chat.id;
+   const data = msg.data;
+   const id = data.split('card_')[1]
+   const cardData = await model.cardData(id)
+   const atmosToken = await model.atmosToken()
+
+   const createPay = await atmos.createPay(
+      100000,
+      cardData?.user_id,
+      atmosToken?.token,
+      atmosToken?.expires
+   )
+   console.log(createPay)
+
+   if (createPay?.result?.code == "OK") {
+      const preApply = await atmos.preApply(
+         cardData?.card_token,
+         createPay?.transaction_id,
+         atmosToken?.token,
+         atmosToken?.expires
+      )
+      console.log(preApply)
+
+
+      if (preApply?.result?.code == "OK") {
+         const apply = await atmos.apply(
+            createPay?.transaction_id,
+            atmosToken?.token,
+            atmosToken?.expires
+         )
+
+         console.log(apply)
+
+         if (apply?.result?.code == "OK") {
+            bot.sendMessage(chatId, 'pul yechildi')
+         }
+      }
+   }
+})
 
 bot.on('contact', async (msg) => {
    const chatId = msg.chat.id;
