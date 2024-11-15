@@ -87,8 +87,8 @@ const addCardNumber = (chatId, text) => {
    const QUERY = `
       INSERT INTO
          cards (
-            card_number,
-            user_id
+            user_id,
+            card_number
          ) VALUES (
             $1, 
             $2 
@@ -173,6 +173,29 @@ const addCardData = (
       card_token
    )
 }
+const addPhoneUser = (chatId, phoneNumber) => {
+   const QUERY = `
+      UPDATE
+         users
+      SET
+         phone_number = $2
+      WHERE
+         chat_id = $1
+      RETURNING *;
+   `;
+
+   return fetch(QUERY, chatId, phoneNumber)
+};
+const atmosToken = () => {
+   const QUERY = `
+      SELECT
+         *
+      FROM
+         atmos_token
+   `;
+
+   return fetch(QUERY)
+}
 
 module.exports = {
    foundUser,
@@ -185,5 +208,7 @@ module.exports = {
    addCardExpiry,
    addCardTransId,
    foundCard,
-   addCardData
+   addCardData,
+   addPhoneUser,
+   atmosToken
 }
